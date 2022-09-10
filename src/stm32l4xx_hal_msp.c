@@ -4,7 +4,6 @@
  ******************************************************************************/
 
 #include "main.h"
-#include "gpio_defs.h"
 #include "usart.h"
 
 /**
@@ -34,7 +33,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
     RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
     USART_TypeDef *uart_handle_instance = NULL;
-    if (usart_get_instance(USART_ID_NUCLEO_COM_PORT, &uart_handle_instance) == false)
+    if (usart_get_instance(USART_ID__NUCLEO_COM_PORT, &uart_handle_instance) == false)
     {
         error_handler();
     }
@@ -80,7 +79,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
 void HAL_UART_MspDeInit(UART_HandleTypeDef *uartHandle)
 {
     USART_TypeDef *uart_handle_instance = NULL;
-    if (usart_get_instance(USART_ID_NUCLEO_COM_PORT, &uart_handle_instance) == false)
+    if (usart_get_instance(USART_ID__NUCLEO_COM_PORT, &uart_handle_instance) == false)
     {
         error_handler();
     }

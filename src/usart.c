@@ -21,8 +21,8 @@ void usart_init(void)
     USART_TypeDef *instance= NULL;
 
     /* USART2: NUCLEO-L433RC-P virtual COM port. */
-    if ((usart_get_handle(USART_ID_NUCLEO_COM_PORT, &handle) == false)
-    ||  (usart_get_instance(USART_ID_NUCLEO_COM_PORT, &instance) == false))
+    if ((usart_get_handle(USART_ID__NUCLEO_COM_PORT, &handle) == false)
+    ||  (usart_get_instance(USART_ID__NUCLEO_COM_PORT, &instance) == false))
     {
         error_handler();
     }
@@ -35,7 +35,7 @@ bool usart_get_handle(USART_ID_t id, UART_HandleTypeDef **return_var)
 
     switch (id)
     {
-        case USART_ID_NUCLEO_COM_PORT:
+        case USART_ID__NUCLEO_COM_PORT:
             *return_var = &huart2;
             retval = true;
             break;
@@ -53,7 +53,7 @@ bool usart_get_instance(USART_ID_t id, USART_TypeDef **return_var)
 
     switch (id)
     {
-        case USART_ID_NUCLEO_COM_PORT:
+        case USART_ID__NUCLEO_COM_PORT:
             *return_var = USART2;
             retval = true;
             break;
@@ -63,6 +63,12 @@ bool usart_get_instance(USART_ID_t id, USART_TypeDef **return_var)
     }
 
     return retval;
+}
+
+void usart_tx(UART_HandleTypeDef *handle, uint8_t *data, uint32_t data_len, uint32_t timeout)
+{
+    assert(data);
+    HAL_UART_Transmit(handle, data, data_len, timeout);
 }
 
 /*============================================================================*/

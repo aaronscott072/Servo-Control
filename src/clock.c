@@ -49,6 +49,10 @@ void clock_config(void)
     {
         error_handler();
     }
+
+    /* Enable GPIO clocks for the OSC pins (C & H). */
+    __HAL_RCC_GPIOC_CLK_ENABLE();
+    __HAL_RCC_GPIOH_CLK_ENABLE();
 }
 
 /*============================================================================*/

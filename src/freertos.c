@@ -30,7 +30,7 @@ void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer, StackTy
 /**
  * @brief  RTOS task ---
  *         Default.
- * @param  params: unused.
+ * @param  params: Unused.
  * @retval None.
  */
 void StartDefaultTask(void *params __attribute__((unused)))

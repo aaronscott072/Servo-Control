@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Operational mode management backbone and related status LEDs.
+    - Operational modes / LED status indications: 
+        - Unknown (during MCU start-up) / None
+        - Idle / Green
+        - Motor running / Yellow
+        - Error state: motor / Red
+        - Error state: LCD / Red
+        - Error state: peripherals (USART, etc.) / Red
+        - Error state: firmware fault // Red & Yellow
+- Documents: STM32L4 datasheet/ref-manual and NUCLEO schematics/pinouts.
 
 ## [0.1.0] - 2022-09-09
 ### Added

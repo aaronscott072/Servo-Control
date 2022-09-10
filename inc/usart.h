@@ -10,7 +10,7 @@
 
 /*===== Typedefs =============================================================*/
 typedef enum USART_ID_t {
-    USART_ID_NUCLEO_COM_PORT,
+    USART_ID__NUCLEO_COM_PORT,
     /* @note: Add future USART's as required. */
 } USART_ID_t;
 
@@ -54,6 +54,16 @@ bool usart_get_handle(USART_ID_t id, UART_HandleTypeDef **return_var);
  *         passed to @param return_var.
  */
 bool usart_get_instance(USART_ID_t id, USART_TypeDef **return_var);
+
+/**
+ * @brief  USART transmit (polling).
+ * @param  handle:   HAL USART handle pointer.
+ * @param  data:     Pointer to data array to transmit.
+ * @param  data_len: Length of the data array to transmit (i.e. sizeof(data)).
+ * @param  timeout:  Timeout in milliseconds.
+ * @retval None.
+ */
+void usart_tx(UART_HandleTypeDef *handle, uint8_t *data, uint32_t data_len, uint32_t timeout);
 
 /*============================================================================*/
 

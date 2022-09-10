@@ -6,6 +6,8 @@
 #include "main.h"
 #include "clock.h"
 #include "gpio.h"
+#include "leds.h"
+#include "op_mode.h"
 #include "rtos.h"
 #include "timer.h"
 #include "usart.h"
@@ -18,7 +20,7 @@ int main(void)
 {
     HAL_Init();
     clock_config();
-    MX_GPIO_Init();
+    leds_init();
     usart_init();
 
     /* Initialise RTOS components. */
@@ -38,12 +40,10 @@ int main(void)
 
 void error_handler(void)
 {
-    assert(false);
     __disable_irq();
-    while (1)
-    {
-        // @todo: implement any further error handling? (e.g. LED / USART msg)
-    }
+    op_mode_set_error_fw_fault();
+    assert(false);
+    while (1) {}
 }
 
 /*============================================================================*/

@@ -92,7 +92,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     /**
      * TIM16 used as the STM32 HAL SYS time base source. Call HAL_IncTick()  
-     * to increment @param uwTick which is used as the HAL time base.
+     * to increment uwTick which is used as the HAL time base.
      */ 
     if (htim->Instance == TIM16)
     {

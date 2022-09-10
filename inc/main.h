@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 /*===== STM32 HAL =====*/
 #include "stm32l4xx_hal.h"
 #include "stm32l4xx_hal_tim.h"
@@ -22,6 +23,7 @@
 #include "limits.h"
 #include "semphr.h"
 /*===== Other =====*/
+#include "gpio_defs.h"
 #include "helper.h"
 
 /*============================================================================*/
