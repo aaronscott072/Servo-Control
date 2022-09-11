@@ -9,6 +9,7 @@
 #include "leds.h"
 #include "op_mode.h"
 #include "rtos.h"
+#include "servo.h"
 #include "timer.h"
 #include "usart.h"
 
@@ -21,6 +22,7 @@ int main(void)
     HAL_Init();
     clock_config();
     leds_init();
+    servo_init();
     usart_init();
 
     /* Initialise and start the RTOS. */

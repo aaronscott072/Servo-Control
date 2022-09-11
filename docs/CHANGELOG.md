@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documents: STM32L4 datasheet/ref-manual and NUCLEO schematics/pinouts.
 - FreeRTOS wrapper driver:
     - Provides a simpler FreeRTOS interface by abstracting API features.
+- Servo motor control initial features: PWM control signal (20 ms period) and the ability to set an angle for the motor shaft (by setting the PWM pulse-width in range (0.5..2.5) ms to move the motor shaft angle in range (-90..90) degrees).
 
 ## [0.1.0] - 2022-09-09
 ### Added

@@ -5,6 +5,7 @@
 
 #include "rtos.h"
 #include "op_mode.h"
+#include "servo.h"
 #include "usart.h"
 
 /*===== Defines & Typedefs ===================================================*/
@@ -12,11 +13,13 @@
 #define TASK_DELAY_MS__TASK_NUCLEO_COM_PORT_IF          1000
 #define TASK_DELAY_MS__TASK_OP_MODE_MGMT                50
 #define TASK_DELAY_MS__TASK_LED_CTRL                    50
+#define TASK_DELAY_MS__TASK_SERVO_MOTOR_CTRL            100
 /*===== Task Priorities =====*/
 #define TASK_PRIORITY__TASK_DEFAULT                     1
 #define TASK_PRIORITY__TASK_NUCLEO_COM_PORT_IF          4
 #define TASK_PRIORITY__TASK_OP_MODE_MGMT                3
 #define TASK_PRIORITY__TASK_LED_CTRL                    2
+#define TASK_PRIORITY__TASK_SERVO_MOTOR_CTRL            5
 /*===== Task Stack Sizes =====*/
 #define TASK_STACK_SIZE__TASK_NUCLEO_COM_PORT_IF        (configMINIMAL_STACK_SIZE*2)
 /*===== Task Handles =====*/
@@ -29,6 +32,7 @@ static void task_default(void *params __attribute__((unused)));
 static void task_nucleo_com_port_if(void *params __attribute__((unused)));
 static void task_op_mode_mgmt(void *params __attribute__((unused)));
 static void task_led_ctrl(void *params __attribute__((unused)));
+static void task_servo_motor_ctrl(void *params __attribute__((unused)));
 /*===== Other Private Functions =====*/
 static void tasks_init(void);
 static void tx_op_mode(void);
@@ -142,6 +146,37 @@ static void task_led_ctrl(void *params __attribute__((unused)))
     }
 }
 
+/**
+ * @brief  RTOS task ---
+ *         Servo motor control.
+ * @param  params: Unused.
+ * @retval None.
+ */
+static void task_servo_motor_ctrl(void *params __attribute__((unused)))
+{
+    servo_set_signal(true);
+
+    /* Task. */
+    while (1)
+    {
+        // @todo: remove below demonstration
+        // Demonstration of moving the shaft through its full range of angles
+        for (int i=0; i<=180; i++)
+        {
+            servo_set_angle(i);
+            freertos_wrapper_task_delay_ms(100);
+        }
+        for (int i=180; i>0; i--)
+        {
+            servo_set_angle(i);
+            freertos_wrapper_task_delay_ms(100);
+        }
+
+        /* Block (delay). */
+        freertos_wrapper_task_delay_ms(TASK_DELAY_MS__TASK_SERVO_MOTOR_CTRL);
+    }
+}
+
 /*===== Other Private Functions ==============================================*/
 
 /**
@@ -174,6 +209,12 @@ static void tasks_init(void)
                                  (void *)0,
                                  TASK_PRIORITY__TASK_LED_CTRL,
                                  &task_handle_led_ctrl);
+    freertos_wrapper_task_create(task_servo_motor_ctrl,
+                                 "task_servo_motor_ctrl",
+                                 configMINIMAL_STACK_SIZE,
+                                 (void *)0,
+                                 TASK_PRIORITY__TASK_SERVO_MOTOR_CTRL,
+                                 0);
 }
 
 /**

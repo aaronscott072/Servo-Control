@@ -23,6 +23,59 @@ void HAL_MspInit(void)
 }
 
 /**
+ * @brief  TIM PWM MSP initialisation.
+ * @param  tim_pwmHandle: TIM PWM handle.
+ * @retval None.
+ */
+void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *tim_pwmHandle)
+{
+    if (tim_pwmHandle->Instance == TIM2)
+    {
+        __HAL_RCC_TIM2_CLK_ENABLE();
+    }
+}
+
+/**
+ * @brief  TIM PWM MSP deinitialisation.
+ * @param  tim_pwmHandle: TIM PWM handle.
+ * @retval None.
+ */
+void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *tim_pwmHandle)
+{
+    if (tim_pwmHandle->Instance == TIM2)
+    {
+        /* Peripheral clock disable */
+        __HAL_RCC_TIM2_CLK_DISABLE();
+    }
+}
+
+/**
+ * @brief  TIM MSP post initialisation.
+ * @param  timHandle: TIM handle.
+ * @retval None.
+ */
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *timHandle)
+{
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+    if (timHandle->Instance == TIM2)
+    {
+        __HAL_RCC_GPIOA_CLK_ENABLE();
+
+        /**
+         * TIM2 GPIO Configuration
+         *     - PA0: TIM2_CH1
+         */
+        GPIO_InitStruct.Pin = GPIO_DEFS__PIN_SERVO_MOTOR_PWM;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+        GPIO_InitStruct.Alternate = GPIO_AF1_TIM2;
+        HAL_GPIO_Init(GPIO_DEFS__PORT_SERVO_MOTOR_PWM, &GPIO_InitStruct);
+    }
+}
+
+/**
  * @brief  UART/USART MSP initialisation.
  * @param  uartHandle: UART/USART handle.
  * @retval None.

@@ -22,8 +22,9 @@
 #include "queue.h"
 #include "limits.h"
 #include "semphr.h"
-/*===== Other =====*/
+/*===== Drivers =====*/
 #include "freertos_wrapper.h"
+/*===== Other =====*/
 #include "gpio_defs.h"
 #include "helper.h"
 

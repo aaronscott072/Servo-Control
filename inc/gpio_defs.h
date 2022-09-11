@@ -32,6 +32,11 @@
 #define GPIO_DEFS__PIN_USART2_RX            GPIO_PIN_3
 #define GPIO_DEFS__CLK_EN_USART2_RX()       __HAL_RCC_GPIOA_CLK_ENABLE()
 
+/*===== SERVO MOTOR CONTROL (TIMx_CHx PWM) =----==============================*/
+
+#define GPIO_DEFS__PORT_SERVO_MOTOR_PWM         GPIOA
+#define GPIO_DEFS__PIN_SERVO_MOTOR_PWM          GPIO_PIN_0
+
 /*============================================================================*/
 
 #endif /* GPIO_DEFS_H ========================================================*/

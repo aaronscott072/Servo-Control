@@ -162,4 +162,6 @@ __weak void vApplicationMallocFailedHook(void);
 __weak void vApplicationGetIdleTaskMemory(StaticTask_t **ppxIdleTaskTCBBuffer, StackType_t **ppxIdleTaskStackBuffer, uint32_t *pulIdleTaskStackSize);
 #endif
 
+/*============================================================================*/
+
 #endif /* FREERTOS_WRAPPER_H =================================================*/

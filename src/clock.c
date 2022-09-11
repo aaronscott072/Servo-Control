@@ -11,8 +11,8 @@
 
 void clock_config(void)
 {
-    RCC_OscInitTypeDef RCC_OscInitStruct;
-    RCC_ClkInitTypeDef RCC_ClkInitStruct;
+    RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+    RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
     /* Initialise the HSI and PLL. */
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;

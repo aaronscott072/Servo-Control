@@ -5,6 +5,7 @@
 
 #include "timer.h"
 
+TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim16;
 
 /*============================================================================*/
@@ -98,6 +99,69 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     {
         HAL_IncTick();
     }
+}
+
+/*===== TIM2 (Servo Motor PWM) ===============================================*/
+
+void timer_tim2_pwm_init(void)
+{
+    TIM_MasterConfigTypeDef config_master = {0};
+    TIM_OC_InitTypeDef config_oc = {0};
+
+    htim2.Instance = TIM2;
+    htim2.Init.Prescaler = TIMER_TIM2_PWM_PRESCALER_0INDEXED;
+    htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim2.Init.Period = TIMER_TIM2_PWM_COUNTER_0INDEXED;
+    htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+    if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+    {
+        error_handler();
+    }
+    config_master.MasterOutputTrigger = TIM_TRGO_RESET;
+    config_master.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+    if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &config_master) != HAL_OK)
+    {
+        error_handler();
+    }
+    config_oc.OCMode = TIM_OCMODE_PWM1;
+    config_oc.Pulse = TIMER_TIM2_PWM_PULSE;
+    config_oc.OCPolarity = TIM_OCPOLARITY_HIGH;
+    config_oc.OCFastMode = TIM_OCFAST_DISABLE;
+    if (HAL_TIM_PWM_ConfigChannel(&htim2, &config_oc, TIM_CHANNEL_1) != HAL_OK)
+    {
+        error_handler();
+    }
+
+    extern void HAL_TIM_MspPostInit(TIM_HandleTypeDef *timHandle);
+    HAL_TIM_MspPostInit(&htim2);
+}
+
+void timer_tim2_pwm_enable(bool state)
+{
+    if (state)
+    {
+        HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);  
+    }
+    else
+    {
+        HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_1);  
+    }
+}
+
+void timer_tim2_pwm_set_pulse(uint32_t pulse)
+{
+    pulse = (pulse > TIMER_TIM2_PWM_COUNTER_0INDEXED) ? TIMER_TIM2_PWM_COUNTER_0INDEXED : pulse;
+    
+    /**
+     * Set duty cycle by setting TIM2_CCR1 (capture/compare register 1).
+     * 
+     * The value in the TIM2_CCR1 register determines the duty
+     * cycle, where the value is (0..counter) where counter
+     * is the value in the TIM2_ARR register. For example, 
+     * counter/2 would give a duty cycle of 50%.
+     */
+    TIM2->CCR1 = pulse;
 }
 
 /*============================================================================*/
