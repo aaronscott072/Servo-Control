@@ -65,6 +65,9 @@ void rtos_init(void)
                                  (void *)0,
                                  TASK_PRIORITY__TASK_LED_CTRL,
                                  &task_handle_led_ctrl);
+
+    /* Start scheduler. */
+    freertos_wrapper_start_scheduler();
 }
 
 /*============================================================================*/

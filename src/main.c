@@ -23,11 +23,8 @@ int main(void)
     leds_init();
     usart_init();
 
-    /* Initialise RTOS components. */
+    /* Start the RTOS. */
     rtos_init();
-
-    /* Start scheduler. */
-    freertos_wrapper_start_scheduler();
 
     /**
      * Flag an error if we ever get here as control should  
