@@ -24,8 +24,6 @@ int main(void)
     usart_init();
 
     /* Initialise RTOS components. */
-    extern void MX_FREERTOS_Init(void);
-    MX_FREERTOS_Init();
     rtos_init();
 
     /* Start scheduler. */

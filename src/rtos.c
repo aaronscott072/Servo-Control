@@ -13,9 +13,10 @@
 #define TASK_DELAY_MS__TASK_OP_MODE_MGMT                50
 #define TASK_DELAY_MS__TASK_LED_CTRL                    50
 /*===== Task Priorities =====*/
-#define TASK_PRIORITY__TASK_NUCLEO_COM_PORT_IF          3
-#define TASK_PRIORITY__TASK_OP_MODE_MGMT                2
-#define TASK_PRIORITY__TASK_LED_CTRL                    1
+#define TASK_PRIORITY__TASK_DEFAULT                     1
+#define TASK_PRIORITY__TASK_NUCLEO_COM_PORT_IF          4
+#define TASK_PRIORITY__TASK_OP_MODE_MGMT                3
+#define TASK_PRIORITY__TASK_LED_CTRL                    2
 /*===== Task Stack Sizes =====*/
 #define TASK_STACK_SIZE__TASK_NUCLEO_COM_PORT_IF        (configMINIMAL_STACK_SIZE*2)
 /*===== Task Handles =====*/
@@ -24,6 +25,7 @@ static TaskHandle_t task_handle_led_ctrl = NULL;
 
 /*===== Private Function Prototypes ==========================================*/
 /*===== FreeRTOS Tasks =====*/
+static void task_default(void *params __attribute__((unused)));
 static void task_nucleo_com_port_if(void *params __attribute__((unused)));
 static void task_op_mode_mgmt(void *params __attribute__((unused)));
 static void task_led_ctrl(void *params __attribute__((unused)));
@@ -36,6 +38,13 @@ static void tx_op_mode(void);
 
 void rtos_init(void)
 {
+    freertos_wrapper_task_create(task_default,
+                                 "task_default",
+                                 configMINIMAL_STACK_SIZE,
+                                 (void *)0,
+                                 TASK_PRIORITY__TASK_DEFAULT,
+                                 0);
+
     freertos_wrapper_task_create(task_nucleo_com_port_if,
                                  "task_nucleo_com_port_if",
                                  TASK_STACK_SIZE__TASK_NUCLEO_COM_PORT_IF,
@@ -63,6 +72,22 @@ void rtos_init(void)
 /*============================================================================*/
 
 /*===== FreeRTOS Tasks =======================================================*/
+
+/**
+ * @brief  RTOS task ---
+ *         Default task: spins when no other tasks are executing.
+ * @param  params: Unused.
+ * @retval None.
+ */
+static void task_default(void *params __attribute__((unused)))
+{
+    /* Task. */
+    while (1)
+    {
+        TickType_t ticks = 1 / portTICK_PERIOD_MS;
+        vTaskDelay(ticks ? ticks : 1); /* Minimum delay = 1 tick */
+    }
+}
 
 /**
  * @brief  RTOS task ---
