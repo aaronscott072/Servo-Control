@@ -29,7 +29,7 @@ int main(void)
     rtos_init();
 
     /* Start scheduler. */
-    vTaskStartScheduler();
+    freertos_wrapper_start_scheduler();
 
     /**
      * Flag an error if we ever get here as control should  
@@ -42,8 +42,13 @@ void error_handler(void)
 {
     __disable_irq();
     op_mode_set_error_fw_fault();
-    assert(false);
-    while (1) {}
+    assert(0);
+    while (1) {;}
+}
+
+void freertos_wrapper_error_handler(void)
+{
+    error_handler();
 }
 
 /*============================================================================*/

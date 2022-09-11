@@ -16,8 +16,9 @@ STM32_HAL_DIR = $(THIRD_PARTY_DIR)/STM32L4xx_HAL_Driver
 ##### Sources ##################################################################
 C_SOURCES = $(shell find src/ -type f -iname '*.c')
 C_SOURCES += $(CMSIS_DIR)/Device/ST/STM32L4xx/Source/Templates/system_stm32l4xx.c
+C_SOURCES += $(shell find $(DRIVERS_DIR) -maxdepth 1 -type f -iname '*.c') # @note: only this directory's source files, not sub-directories (-maxdepth 1)
 C_SOURCES += $(shell find $(STM32_HAL_DIR)/Src/ -type f \( -iname 'stm32l4xx_hal*.c' -not -iname '*_template.c' \)) # @note: ignoring LL and *_template.c source files
-C_SOURCES += $(shell find $(FREERTOS_DIR)/Source/ -maxdepth 1 -type f -iname '*.c') # @note: only this directories source files, no sub-directories (-maxdepth 1)
+C_SOURCES += $(shell find $(FREERTOS_DIR)/Source/ -maxdepth 1 -type f -iname '*.c') # @note: only this directory's source files, not sub-directories (-maxdepth 1)
 C_SOURCES += $(FREERTOS_DIR)/Source/portable/MemMang/heap_4.c
 C_SOURCES += $(FREERTOS_DIR)/Source/portable/GCC/ARM_CM4F/port.c
 
@@ -62,6 +63,7 @@ C_DEFS = -DUSE_HAL_DRIVER -DSTM32L433xx
 
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 CFLAGS += $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -fdata-sections -ffunction-sections
+CFLAGS += -D__weak="__attribute__((weak))"
 CFLAGS += -Werror -Wall -Wextra
 CFLAGS += -Wcast-qual -Wpedantic -Wpointer-arith -Wshadow
 

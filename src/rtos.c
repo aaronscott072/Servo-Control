@@ -13,7 +13,7 @@
 #define TASK_DELAY_MS__TASK_OP_MODE_MGMT                50
 #define TASK_DELAY_MS__TASK_LED_CTRL                    50
 /*===== Task Priorities =====*/
-#define TASK_PRIORITY__TASK_NUCLEO_COM_PORT_IF          3 // @todo: priority labels?
+#define TASK_PRIORITY__TASK_NUCLEO_COM_PORT_IF          3
 #define TASK_PRIORITY__TASK_OP_MODE_MGMT                2
 #define TASK_PRIORITY__TASK_LED_CTRL                    1
 /*===== Task Stack Sizes =====*/
@@ -36,44 +36,26 @@ static void tx_op_mode(void);
 
 void rtos_init(void)
 {
-    // @todo: create a FreeRTOS wrapper (to avoid duplicate code)
-    BaseType_t ret;
+    freertos_wrapper_task_create(task_nucleo_com_port_if,
+                                 "task_nucleo_com_port_if",
+                                 TASK_STACK_SIZE__TASK_NUCLEO_COM_PORT_IF,
+                                 (void *)0,
+                                 TASK_PRIORITY__TASK_NUCLEO_COM_PORT_IF,
+                                 0);
 
-    ret = xTaskCreate(task_nucleo_com_port_if,
-                      "task_nucleo_com_port_if",
-                      TASK_STACK_SIZE__TASK_NUCLEO_COM_PORT_IF,
-                      (void *)0,
-                      TASK_PRIORITY__TASK_NUCLEO_COM_PORT_IF,
-                      0);
-    if (ret != pdPASS)
-    {
-        /* Error - Task not created (insufficient memory allocation). */
-        error_handler();
-    }
+    freertos_wrapper_task_create(task_op_mode_mgmt,
+                                 "task_op_mode_mgmt",
+                                 configMINIMAL_STACK_SIZE,
+                                 (void *)0,
+                                 TASK_PRIORITY__TASK_OP_MODE_MGMT,
+                                 &task_handle_op_mode_mgmt);
 
-    ret = xTaskCreate(task_op_mode_mgmt,
-                      "task_op_mode_mgmt",
-                      configMINIMAL_STACK_SIZE,
-                      (void *)0,
-                      TASK_PRIORITY__TASK_OP_MODE_MGMT,
-                      &task_handle_op_mode_mgmt);
-    if (ret != pdPASS)
-    {
-        /* Error - Task not created (insufficient memory allocation). */
-        error_handler();
-    }
-
-    ret = xTaskCreate(task_led_ctrl,
-                      "task_led_ctrl",
-                      configMINIMAL_STACK_SIZE,
-                      (void *)0,
-                      TASK_PRIORITY__TASK_LED_CTRL,
-                      &task_handle_led_ctrl);
-    if (ret != pdPASS)
-    {
-        /* Error - Task not created (insufficient memory allocation). */
-        error_handler();
-    }
+    freertos_wrapper_task_create(task_led_ctrl,
+                                 "task_led_ctrl",
+                                 configMINIMAL_STACK_SIZE,
+                                 (void *)0,
+                                 TASK_PRIORITY__TASK_LED_CTRL,
+                                 &task_handle_led_ctrl);
 }
 
 /*============================================================================*/
@@ -97,7 +79,7 @@ static void task_nucleo_com_port_if(void *params __attribute__((unused)))
         tx_op_mode();
 
         /* Block (delay). */
-        vTaskDelay(pdMS_TO_TICKS(TASK_DELAY_MS__TASK_NUCLEO_COM_PORT_IF));
+        freertos_wrapper_task_delay_ms(TASK_DELAY_MS__TASK_NUCLEO_COM_PORT_IF);
     }
 }
 
@@ -125,11 +107,11 @@ static void task_op_mode_mgmt(void *params __attribute__((unused)))
         /* Notify LEDs control task to run as soon as possible *if* the mode has changed. */
         if (mode_changed)
         {
-            xTaskNotifyGive(task_handle_led_ctrl);
+            freertos_wrapper_task_notify_give(task_handle_led_ctrl);
         }
 
         /* Block (notification or delay/timeout). */
-        xTaskNotifyWait(entry, exit, &nv, pdMS_TO_TICKS(TASK_DELAY_MS__TASK_OP_MODE_MGMT));
+        freertos_wrapper_task_notify_wait_ms(entry, exit, &nv, TASK_DELAY_MS__TASK_OP_MODE_MGMT);
     }
 }
 
@@ -152,7 +134,7 @@ static void task_led_ctrl(void *params __attribute__((unused)))
         op_mode_set_leds();
        
         /* Block (notification or delay/timeout). */
-        xTaskNotifyWait(entry, exit, &nv, pdMS_TO_TICKS(TASK_DELAY_MS__TASK_LED_CTRL));
+        freertos_wrapper_task_notify_wait_ms(entry, exit, &nv, TASK_DELAY_MS__TASK_LED_CTRL);
     }
 }
 

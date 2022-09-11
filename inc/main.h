@@ -23,6 +23,7 @@
 #include "limits.h"
 #include "semphr.h"
 /*===== Other =====*/
+#include "freertos_wrapper.h"
 #include "gpio_defs.h"
 #include "helper.h"
 
@@ -41,6 +42,12 @@ int main(void);
  * @retval None.
  */
 void error_handler(void);
+
+/**
+ * @brief  Overwrite weakly defined function in @ref freertos_wrapper.h.
+ * @retval None.
+ */
+void freertos_wrapper_error_handler(void);
 
 /*============================================================================*/
 
