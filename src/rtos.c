@@ -23,9 +23,12 @@ static TaskHandle_t task_handle_op_mode_mgmt = NULL;
 static TaskHandle_t task_handle_led_ctrl = NULL;
 
 /*===== Private Function Prototypes ==========================================*/
+/*===== FreeRTOS Tasks =====*/
 static void task_nucleo_com_port_if(void *params __attribute__((unused)));
 static void task_op_mode_mgmt(void *params __attribute__((unused)));
 static void task_led_ctrl(void *params __attribute__((unused)));
+/*===== Other Private Functions =====*/
+static void tx_op_mode(void);
 
 /*============================================================================*/
 /*===== Public Functions =====================================================*/
@@ -87,37 +90,11 @@ void rtos_init(void)
  */
 static void task_nucleo_com_port_if(void *params __attribute__((unused)))
 {
-    #define TX_BUFF_MAX 100
-    char tx_buff[TX_BUFF_MAX] = {0};
-    int pos; /* TX buffer position for use w/ sprintf(). */
-
-    /* Retrieve relevant USART handle. */
-    UART_HandleTypeDef *handle = NULL;
-    if (usart_get_handle(USART_ID__NUCLEO_COM_PORT, &handle) == false)
-    {
-        error_handler();
-    }
-
     /* Task. */
     while (1)
     {
         /* Transmit operational mode. */
-        memset(tx_buff, 0x00, sizeof(tx_buff)); /* Zeroise Tx buffer. */
-        pos = 0; /* Reset TX buffer position for use w/ sprintf(). */
-        pos += sprintf(&tx_buff[pos], "Operational mode: ");
-        switch (op_mode_get())
-        {
-            case OP_MODE__UNKNOWN:           pos += sprintf(&tx_buff[pos], "UNKNOWN");                break;
-            case OP_MODE__IDLE:              pos += sprintf(&tx_buff[pos], "IDLE");                   break;
-            case OP_MODE__MOTOR_RUNNING:     pos += sprintf(&tx_buff[pos], "MOTOR RUNNING");          break;
-            case OP_MODE__ERROR_MOTOR:       pos += sprintf(&tx_buff[pos], "ERROR (MOTOR)");          break;
-            case OP_MODE__ERROR_LCD:         pos += sprintf(&tx_buff[pos], "ERROR (LCD)");            break;
-            case OP_MODE__ERROR_PERIPHERALS: pos += sprintf(&tx_buff[pos], "ERROR (PERIPHERALS)");    break;
-            case OP_MODE__ERROR_FW_FAULT:    pos += sprintf(&tx_buff[pos], "ERROR (FIRMWARE FAULT)"); break;
-            default:                                                                                break;
-        }
-        sprintf(&tx_buff[pos], "\r\n");
-        usart_tx(handle, (uint8_t*)tx_buff, sizeof(tx_buff), 1000);
+        tx_op_mode();
 
         /* Block (delay). */
         vTaskDelay(pdMS_TO_TICKS(TASK_DELAY_MS__TASK_NUCLEO_COM_PORT_IF));
@@ -177,6 +154,60 @@ static void task_led_ctrl(void *params __attribute__((unused)))
         /* Block (notification or delay/timeout). */
         xTaskNotifyWait(entry, exit, &nv, pdMS_TO_TICKS(TASK_DELAY_MS__TASK_LED_CTRL));
     }
+}
+
+/*===== Other Private Functions ==============================================*/
+
+/**
+ * @brief  Construct and transmit a message via the Nucleo COM port interface:
+ *             - Message: operational mode.
+ * @retval None.
+ */
+static void tx_op_mode(void)
+{
+    #define TX_BUFF_MAX 100
+    char data[TX_BUFF_MAX] = {0};
+    int pos = 0; /* Tx buffer position; for use with sprintf(). */
+
+    /* Construct message. */
+    pos += sprintf(&data[pos], "Operational mode: ");
+    switch (op_mode_get())
+    {
+        case OP_MODE__UNKNOWN:
+            pos += sprintf(&data[pos], "UNKNOWN");
+            break;
+        case OP_MODE__IDLE:
+            pos += sprintf(&data[pos], "IDLE");
+            break;
+        case OP_MODE__MOTOR_RUNNING:
+            pos += sprintf(&data[pos], "MOTOR RUNNING");
+            break;
+        case OP_MODE__ERROR_MOTOR:
+            pos += sprintf(&data[pos], "ERROR (MOTOR)");
+            break;
+        case OP_MODE__ERROR_LCD:
+            pos += sprintf(&data[pos], "ERROR (LCD)");
+            break;
+        case OP_MODE__ERROR_PERIPHERALS:
+            pos += sprintf(&data[pos], "ERROR (PERIPHERALS)");
+            break;
+        case OP_MODE__ERROR_FW_FAULT:
+            pos += sprintf(&data[pos], "ERROR (FIRMWARE FAULT)");
+            break;
+        default:
+            break;
+    }
+    sprintf(&data[pos], "\r\n"); /* CRLF. */
+
+    /* Retrieve relevant USART handle. */
+    UART_HandleTypeDef *handle = NULL;
+    if (usart_get_handle(USART_ID__NUCLEO_COM_PORT, &handle) == false)
+    {
+        error_handler();
+    }
+
+    /* Transmit. */
+    usart_tx(handle, (uint8_t *)data, sizeof(data), 1000);
 }
 
 /*============================================================================*/
