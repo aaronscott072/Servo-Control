@@ -11,7 +11,7 @@
 /*===== Defines & Macros =====================================================*/
 
 #ifndef UNUSED
-#define UNUSED(X) ((void)X) /* Alternatively use __attribute__((unused)). */
+#define UNUSED(X) ((void)X) /* Alternatively use __unused or __attribute__((unused)). */
 #endif
 
 #define NUM_ARRAY_ELS(array) (sizeof(array) / sizeof((array)[0]))

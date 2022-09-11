@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         - Error state: motor / Red
         - Error state: LCD / Red
         - Error state: peripherals (USART, etc.) / Red
-        - Error state: firmware fault // Red & Yellow
+        - Error state: firmware fault / Red & Yellow
 - Documents: STM32L4 datasheet/ref-manual and NUCLEO schematics/pinouts.
 - FreeRTOS wrapper driver:
     - Provides a simpler FreeRTOS interface by abstracting API features.
