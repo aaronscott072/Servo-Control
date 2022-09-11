@@ -1,6 +1,6 @@
 /*******************************************************************************
- * @file   rtos.H
- * @brief  RTOS components (tasks/queues/locks/etc.) initialisation header file.
+ * @file   rtos.h
+ * @brief  RTOS header file. Provides framework to initialise/start the RTOS.
  ******************************************************************************/
 
 #ifndef RTOS_H
@@ -13,8 +13,9 @@
 /*============================================================================*/
 
 /**
- * @brief  RTOS components (tasks/queues/locks/etc.) initialisation.
- * @note   Call in @ref main.c prior to starting the scheduler.
+ * @brief  Initialise and start the RTOS:
+ *             - Initialise components (tasks/queues/locks/etc.)
+ *             - Start the scheduler
  * @retval None.
  */
 void rtos_init(void);

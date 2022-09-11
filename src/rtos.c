@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @file   rtos.c
- * @brief  RTOS components (tasks/queues/locks/etc.) initialisation source file.
+ * @brief  RTOS source file. Provides framework to initialise/start the RTOS.
  ******************************************************************************/
 
 #include "rtos.h"
@@ -30,6 +30,7 @@ static void task_nucleo_com_port_if(void *params __attribute__((unused)));
 static void task_op_mode_mgmt(void *params __attribute__((unused)));
 static void task_led_ctrl(void *params __attribute__((unused)));
 /*===== Other Private Functions =====*/
+static void tasks_init(void);
 static void tx_op_mode(void);
 
 /*============================================================================*/
@@ -38,33 +39,8 @@ static void tx_op_mode(void);
 
 void rtos_init(void)
 {
-    freertos_wrapper_task_create(task_default,
-                                 "task_default",
-                                 configMINIMAL_STACK_SIZE,
-                                 (void *)0,
-                                 TASK_PRIORITY__TASK_DEFAULT,
-                                 0);
-
-    freertos_wrapper_task_create(task_nucleo_com_port_if,
-                                 "task_nucleo_com_port_if",
-                                 TASK_STACK_SIZE__TASK_NUCLEO_COM_PORT_IF,
-                                 (void *)0,
-                                 TASK_PRIORITY__TASK_NUCLEO_COM_PORT_IF,
-                                 0);
-
-    freertos_wrapper_task_create(task_op_mode_mgmt,
-                                 "task_op_mode_mgmt",
-                                 configMINIMAL_STACK_SIZE,
-                                 (void *)0,
-                                 TASK_PRIORITY__TASK_OP_MODE_MGMT,
-                                 &task_handle_op_mode_mgmt);
-
-    freertos_wrapper_task_create(task_led_ctrl,
-                                 "task_led_ctrl",
-                                 configMINIMAL_STACK_SIZE,
-                                 (void *)0,
-                                 TASK_PRIORITY__TASK_LED_CTRL,
-                                 &task_handle_led_ctrl);
+    /* Initialisation (tasks/queues/locks/etc.). */
+    tasks_init();
 
     /* Start scheduler. */
     freertos_wrapper_start_scheduler();
@@ -167,6 +143,38 @@ static void task_led_ctrl(void *params __attribute__((unused)))
 }
 
 /*===== Other Private Functions ==============================================*/
+
+/**
+ * @brief  Initialise tasks.
+ * @retval None.
+ */
+static void tasks_init(void)
+{
+    freertos_wrapper_task_create(task_default,
+                                 "task_default",
+                                 configMINIMAL_STACK_SIZE,
+                                 (void *)0,
+                                 TASK_PRIORITY__TASK_DEFAULT,
+                                 0);
+    freertos_wrapper_task_create(task_nucleo_com_port_if,
+                                 "task_nucleo_com_port_if",
+                                 TASK_STACK_SIZE__TASK_NUCLEO_COM_PORT_IF,
+                                 (void *)0,
+                                 TASK_PRIORITY__TASK_NUCLEO_COM_PORT_IF,
+                                 0);
+    freertos_wrapper_task_create(task_op_mode_mgmt,
+                                 "task_op_mode_mgmt",
+                                 configMINIMAL_STACK_SIZE,
+                                 (void *)0,
+                                 TASK_PRIORITY__TASK_OP_MODE_MGMT,
+                                 &task_handle_op_mode_mgmt);
+    freertos_wrapper_task_create(task_led_ctrl,
+                                 "task_led_ctrl",
+                                 configMINIMAL_STACK_SIZE,
+                                 (void *)0,
+                                 TASK_PRIORITY__TASK_LED_CTRL,
+                                 &task_handle_led_ctrl);
+}
 
 /**
  * @brief  Construct and transmit a message via the Nucleo COM port interface:

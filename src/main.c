@@ -23,7 +23,7 @@ int main(void)
     leds_init();
     usart_init();
 
-    /* Start the RTOS. */
+    /* Initialise and start the RTOS. */
     rtos_init();
 
     /**
