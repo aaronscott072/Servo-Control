@@ -36,7 +36,14 @@ int main(void)
 void error_handler(void)
 {
     __disable_irq();
+
+    /**
+     * Set LED status indication for a firmware fault.
+     * Ensure GPIOs are configured before attempting to enable LEDs.
+     */
+    leds_init();
     op_mode_set_error_fw_fault();
+
     assert(0);
     while (1) {;}
 }
