@@ -17,7 +17,7 @@
 #define TASK_PRIORITY__TASK_OP_MODE_MGMT                2
 #define TASK_PRIORITY__TASK_LED_CTRL                    1
 /*===== Task Stack Sizes =====*/
-#define TASK_STACK_SIZE__TASK_NUCLEO_COM_PORT_IF        (configMINIMAL_STACK_SIZE*3)
+#define TASK_STACK_SIZE__TASK_NUCLEO_COM_PORT_IF        (configMINIMAL_STACK_SIZE*2)
 /*===== Task Handles =====*/
 static TaskHandle_t task_handle_op_mode_mgmt = NULL;
 static TaskHandle_t task_handle_led_ctrl = NULL;
