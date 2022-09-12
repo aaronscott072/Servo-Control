@@ -5,6 +5,7 @@
 
 #include "op_mode.h"
 #include "leds.h"
+#include "servo.h"
 
 static OP_MODE_t _op_mode = OP_MODE__UNKNOWN;
 
@@ -28,8 +29,19 @@ bool op_mode_update(void)
     // -> consider implementing as a state-machine
     //
 
-    /* System idle. */
-    _op_mode = OP_MODE__IDLE;
+    static uint8_t angle_prev = 0;
+    uint8_t angle_new = servo_get_angle_expected();
+    if (angle_new != angle_prev)
+    {
+        /* Motor running. */
+        _op_mode = OP_MODE__MOTOR_RUNNING;
+    }
+    else
+    {
+        /* System idle. */
+        _op_mode = OP_MODE__IDLE;
+    }
+    angle_prev = angle_new;
 
     /* Determine if the mode has changed. */
     static OP_MODE_t previous = OP_MODE__UNKNOWN;

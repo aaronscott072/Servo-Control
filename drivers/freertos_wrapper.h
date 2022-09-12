@@ -31,13 +31,25 @@
 /*===== Public Functions =====================================================*/
 /*============================================================================*/
 
-/*===== OS Control ===========================================================*/
+/*===== OS Control and General ===============================================*/
 
 /**
  * @brief  Start the scheduler.
  * @retval None.
  */
 void freertos_wrapper_start_scheduler(void);
+
+/**
+ * @brief  Get scheduler state.
+ * @retval Scheduler state.
+ */
+BaseType_t freertos_wrapper_get_scheduler_state(void);
+
+/**
+ * @brief  Check if the scheduler is running.
+ * @retval Boolean indicating if the scheduler is running.
+ */
+bool freertos_wrapper_is_scheduler_running(void);
 
 /*===== Tasks ================================================================*/
 

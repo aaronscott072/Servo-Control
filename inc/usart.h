@@ -9,6 +9,7 @@
 #include "main.h"
 
 /*===== Typedefs =============================================================*/
+
 typedef enum USART_ID_t {
     USART_ID__NUCLEO_COM_PORT,
     /* @note: Add future USART's as required. */

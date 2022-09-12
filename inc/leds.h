@@ -11,7 +11,7 @@
 /**
  * @note: - Edit this enum to manage the publically available IDs for the LEDs 
  *          in the system.
- *        - Concurrently add/remove relevant entries to/from _leds in @ref 
+ *        - Concurrently add/remove relevant entries to/from _leds_gpio in @ref 
  *          leds.c as required, ensuring the ordering matches this enum.
  */
 typedef enum LED_ID_t {

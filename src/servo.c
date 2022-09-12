@@ -7,13 +7,10 @@
 #include "servo.h"
 #include "timer.h"
 
-/*===== Defines & Macros =====================================================*/
+static uint8_t _angle_expected; 
+// @todo: add when implementing controller: static uint8_t _angle_actual;
 
-/* Position values (angle in degrees). */
-#define SERVO_POSITION_MIN_DEG_INT  (-90)
-#define SERVO_POSITION_MAX_DEG_INT  90
-#define SERVO_POSITION_MIN_DEG_UINT 0    /* == -90 degrees. */
-#define SERVO_POSITION_MAX_DEG_UINT 180  /* == +90 degrees. */
+/*===== Defines & Macros =====================================================*/
 
 /* PWM pulse-widths to achieve certain positions given a 20 ms period signal. */
 #define SERVO_PWM_PERIOD_IN_MS                     20  /* 20 ms PWM period. */
@@ -40,6 +37,9 @@
     ((((SERVO_PWM_PULSE_VALUE_MAX - SERVO_PWM_PULSE_VALUE_MIN)/(SERVO_POSITION_MAX_DEG_UINT - \
     SERVO_POSITION_MIN_DEG_UINT)) * (float)a) + SERVO_PWM_PULSE_VALUE_MIN)
 
+/*===== Private Function Prototypes ==========================================*/
+static void record_angle_expected(uint8_t angle);
+
 /*============================================================================*/
 /*===== Public Functions =====================================================*/
 /*============================================================================*/
@@ -57,8 +57,62 @@ void servo_set_signal(bool state)
 void servo_set_position(uint8_t angle)
 {
     angle = LIMIT_VAR_MAX(SERVO_POSITION_MAX_DEG_UINT, angle);
+    record_angle_expected(angle);
     uint32_t pulse = SERVO_ANGLE_TO_PULSE_VALUE(angle);
     timer_tim2_pwm_set_pulse(pulse);
+}
+
+uint8_t servo_get_angle_expected(void)
+{
+    return _angle_expected;
+}
+
+void servo_test_oscillate(uint8_t angle_start, uint8_t angle_end, bool reset)
+{
+    angle_end = LIMIT_VAR_MAX(SERVO_POSITION_MAX_DEG_UINT, angle_end);
+
+    static uint8_t i = 0;
+    static bool clockwise = true;
+
+    if (reset)
+    {
+        i = 0;
+        clockwise = true;
+        return;
+    }
+
+    servo_set_position(i);
+
+    if (clockwise)
+    {
+        if (++i >= angle_end)
+        {
+            clockwise = false;
+        }
+    }
+    else
+    {
+        if (--i <= angle_start)
+        {
+            clockwise = true;
+        }
+    }
+}
+
+/*============================================================================*/
+/*===== Private Functions ====================================================*/
+/*============================================================================*/
+
+/**
+ * @brief  Record the *expected* servo motor shaft position (angle in degrees) 
+ *         such that external sources can retrieve this value by calling
+ *         servo_get_angle_expected.
+ * @param  angle: Angle in degrees (0..180).
+ * @retval None.
+ */
+static void record_angle_expected(uint8_t angle)
+{
+    _angle_expected = angle;
 }
 
 /*============================================================================*/

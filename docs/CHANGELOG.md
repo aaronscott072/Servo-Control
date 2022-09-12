@@ -11,16 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         - Unknown (during MCU start-up) / None
         - Idle / Green
         - Motor running / Yellow
-        - Error state: motor / Red
-        - Error state: LCD / Red
-        - Error state: peripherals (USART, etc.) / Red
         - Error state: firmware fault / Red & Yellow
+        - (to be implemented) Error state: motor / Red
+        - (to be implemented) Error state: LCD / Red
+        - (to be implemented) Error state: peripherals (USART, etc.) / Red
 - Documents: STM32L4 datasheet/ref-manual and NUCLEO schematics/pinouts.
 - FreeRTOS wrapper driver:
     - Provides a simpler FreeRTOS interface by abstracting API features.
 - Servo motor control initial features:
     - PWM control signal (20 ms period)
-    - Ability to set position (angle in degrees) of the motor shaft by setting the PWM pulse-width in range (0.5..2.5) ms to move the position in range (-90..90) degrees.
+    - Ability to set position (angle in degrees) of the motor shaft by setting the PWM pulse-width in range (0.5..2.5) ms to move the position in range (-90..+90) degrees.
+- LCD base driver features:
+    - Display initialisation
+    - Ability to clear and write lines to the display.
+- Demonstration for the current features:
+    - The servo motor shaft position (angle in degrees) oscillates between (-90..+90) degrees.
+    - The position and operational mode are displayed on the LCD.
+    - The position and operational mode are transmitted to the virtual COM port.
+    - LEDs indicate when the operational mode is "idle" (green), "motor running" (yellow), or "error state: firmware fault" (red & yellow).
 
 ## [0.1.0] - 2022-09-09
 ### Added

@@ -7,6 +7,7 @@
 #include "clock.h"
 #include "gpio.h"
 #include "helper.h"
+#include "lcd.h"
 #include "leds.h"
 #include "op_mode.h"
 #include "rtos.h"
@@ -22,6 +23,7 @@ int main(void)
 {
     hal_init();
     clock_config();
+    lcd_init();
     leds_init();
     servo_init();
     usart_init();
@@ -51,9 +53,23 @@ void error_handler(void)
     while (1) {;}
 }
 
+/*===== Overwriting Weakly Defined Functions =================================*/
+
 void freertos_wrapper_error_handler(void)
 {
     error_handler();
+}
+
+void lcd_delay_ms(uint32_t ms)
+{
+    if (freertos_wrapper_is_scheduler_running())
+    {
+        freertos_wrapper_task_delay_ms(ms);
+    }
+    else
+    {
+        HAL_Delay(ms);
+    }
 }
 
 /*============================================================================*/

@@ -12,11 +12,21 @@ static bool check_pass(BaseType_t retval);
 /*===== Public Functions =====================================================*/
 /*============================================================================*/
 
-/*===== OS Control ===========================================================*/
+/*===== OS Control and General ===============================================*/
 
 void freertos_wrapper_start_scheduler(void)
 {
     vTaskStartScheduler();
+}
+
+BaseType_t freertos_wrapper_get_scheduler_state(void)
+{
+    return xTaskGetSchedulerState();
+}
+
+bool freertos_wrapper_is_scheduler_running(void)
+{
+    return (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING);
 }
 
 /*===== Tasks ================================================================*/

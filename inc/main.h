@@ -44,11 +44,20 @@ int main(void);
  */
 void error_handler(void);
 
+/*===== Overwriting Weakly Defined Functions =================================*/
+
 /**
- * @brief  Overwrite weakly defined function in @ref freertos_wrapper.h.
+ * @brief  Overwrite weakly defined function in @ref freertos_wrapper.c.
  * @retval None.
  */
 void freertos_wrapper_error_handler(void);
+
+/**
+ * @brief  Overwrite weakly defined function in @ref lcd.c.
+ * @param  ms: delay (in milliseconds).
+ * @retval None.
+ */
+void lcd_delay_ms(uint32_t ms);
 
 /*============================================================================*/
 
