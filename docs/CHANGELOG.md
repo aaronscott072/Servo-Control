@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.2.0] - 2022-09-12
 ### Added
 - Operational mode management backbone and related status LEDs.
     - Operational modes / LED status indications: 
@@ -24,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - LCD base driver features:
     - Display initialisation
     - Ability to clear and write lines to the display.
-- Demonstration for the current features:
+- This version contains these key features:
     - The servo motor shaft position (angle in degrees) oscillates between (-90..+90) degrees.
     - The position and operational mode are displayed on the LCD.
     - The position and operational mode are transmitted to the virtual COM port.
