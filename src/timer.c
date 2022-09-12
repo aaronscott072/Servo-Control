@@ -151,8 +151,8 @@ void timer_tim2_pwm_enable(bool state)
 
 void timer_tim2_pwm_set_pulse(uint32_t pulse)
 {
-    pulse = (pulse > TIMER_TIM2_PWM_COUNTER_0INDEXED) ? TIMER_TIM2_PWM_COUNTER_0INDEXED : pulse;
-    
+    pulse = LIMIT_VAR_MAX(TIMER_TIM2_PWM_COUNTER_0INDEXED, pulse);
+
     /**
      * Set duty cycle by setting TIM2_CCR1 (capture/compare register 1).
      * 

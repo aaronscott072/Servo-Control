@@ -10,6 +10,12 @@
 
 /*===== Defines & Macros =====================================================*/
 
+/* Position values (angle in degrees). */
+#define SERVO_POSITION_MIN_DEG_INT  (-90)
+#define SERVO_POSITION_MAX_DEG_INT  90
+#define SERVO_POSITION_MIN_DEG_UINT 0    /* == -90 degrees. */
+#define SERVO_POSITION_MAX_DEG_UINT 180  /* == +90 degrees. */
+
 /* PWM pulse-widths to achieve certain positions given a 20 ms period signal. */
 #define SERVO_PWM_PERIOD_IN_MS                     20  /* 20 ms PWM period. */
 #define SERVO_PWM_PULSE_WIDTH_FOR_NEG_90_DEG_IN_MS 0.5 /* 0.5 ms pulse-width = -90 Deg. */
@@ -32,8 +38,8 @@
  *     Val = (((pulse_max - pulse_min)/(angle_max - angle_min)) * angle) + pulse_min
  */
 #define SERVO_ANGLE_TO_PULSE_VALUE(a) \
-    ((((SERVO_PWM_PULSE_VALUE_MAX - SERVO_PWM_PULSE_VALUE_MIN)/(90 - -90)) * \
-    (float)a) + SERVO_PWM_PULSE_VALUE_MIN)
+    ((((SERVO_PWM_PULSE_VALUE_MAX - SERVO_PWM_PULSE_VALUE_MIN)/(SERVO_POSITION_MAX_DEG_UINT - \
+    SERVO_POSITION_MIN_DEG_UINT)) * (float)a) + SERVO_PWM_PULSE_VALUE_MIN)
 
 /*============================================================================*/
 /*===== Public Functions =====================================================*/
@@ -51,7 +57,7 @@ void servo_set_signal(bool state)
 
 void servo_set_position(uint8_t angle)
 {
-    angle = (angle > 180) ? 180 : angle;
+    angle = LIMIT_VAR_MAX(SERVO_POSITION_MAX_DEG_UINT, angle);
     uint32_t pulse = SERVO_ANGLE_TO_PULSE_VALUE(angle);
     timer_tim2_pwm_set_pulse(pulse);
 }
