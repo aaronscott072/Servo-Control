@@ -4,7 +4,7 @@
  * 
  *         Provides:
  *             - STM32 HAL timer/PWM initialisation.
- *             - Set servo motor shaft angle.
+ *             - Set servo motor shaft position (angle in degrees).
  *             - @todo
  *  
  ******************************************************************************/
@@ -34,11 +34,11 @@ void servo_init(void);
 void servo_set_signal(bool state);
 
 /**
- * @brief  Set servo motor shaft angle (degrees).
+ * @brief  Set servo motor shaft position (angle in degrees).
  * @param  angle: Angle in degrees (0..180).
  * @retval None.
  */
-void servo_set_angle(uint8_t angle);
+void servo_set_position(uint8_t angle);
 
 /*============================================================================*/
 

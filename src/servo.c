@@ -10,7 +10,7 @@
 
 /*===== Defines & Macros =====================================================*/
 
-/* PWM pulse-widths to achieve certain angles given a 20 ms period signal. */
+/* PWM pulse-widths to achieve certain positions given a 20 ms period signal. */
 #define SERVO_PWM_PERIOD_IN_MS                     20  /* 20 ms PWM period. */
 #define SERVO_PWM_PULSE_WIDTH_FOR_NEG_90_DEG_IN_MS 0.5 /* 0.5 ms pulse-width = -90 Deg. */
 #define SERVO_PWM_PULSE_WIDTH_FOR_0_DEG_IN_MS      1.5 /* 1.5 ms pulse-width =   0 Deg. */
@@ -49,7 +49,7 @@ void servo_set_signal(bool state)
     timer_tim2_pwm_enable(state);
 }
 
-void servo_set_angle(uint8_t angle)
+void servo_set_position(uint8_t angle)
 {
     angle = (angle > 180) ? 180 : angle;
     uint32_t pulse = SERVO_ANGLE_TO_PULSE_VALUE(angle);

@@ -159,18 +159,7 @@ static void task_servo_motor_ctrl(void *params __attribute__((unused)))
     /* Task. */
     while (1)
     {
-        // @todo: remove below demonstration
-        // Demonstration of moving the shaft through its full range of angles
-        for (int i=0; i<=180; i++)
-        {
-            servo_set_angle(i);
-            freertos_wrapper_task_delay_ms(100);
-        }
-        for (int i=180; i>0; i--)
-        {
-            servo_set_angle(i);
-            freertos_wrapper_task_delay_ms(100);
-        }
+        // @todo: close the loop / implement controller / implement state-machine
 
         /* Block (delay). */
         freertos_wrapper_task_delay_ms(TASK_DELAY_MS__TASK_SERVO_MOTOR_CTRL);
