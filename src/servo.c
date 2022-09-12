@@ -1,7 +1,6 @@
 /*******************************************************************************
  * @file   servo.c
  * @brief  Servo motor control source file.
- * 
  *         Refer to .h file top-level comment for information.
  ******************************************************************************/
 

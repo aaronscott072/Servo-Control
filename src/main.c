@@ -6,6 +6,7 @@
 #include "main.h"
 #include "clock.h"
 #include "gpio.h"
+#include "helper.h"
 #include "leds.h"
 #include "op_mode.h"
 #include "rtos.h"
@@ -19,7 +20,7 @@
 
 int main(void)
 {
-    HAL_Init();
+    hal_init();
     clock_config();
     leds_init();
     servo_init();
