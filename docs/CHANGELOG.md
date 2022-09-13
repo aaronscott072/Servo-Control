@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         - (to be implemented) Error state: motor / Red
         - (to be implemented) Error state: LCD / Red
         - (to be implemented) Error state: peripherals (USART, etc.) / Red
-- Documents: STM32L4 datasheet/ref-manual and NUCLEO schematics/pinouts.
+- Documents: STM32L4 datasheet/ref-manual, NUCLEO schematics/pinouts, and HD44780U datasheet and LCD pinout.
 - FreeRTOS wrapper driver:
     - Provides a simpler FreeRTOS interface by abstracting API features.
 - Servo motor control initial features:
