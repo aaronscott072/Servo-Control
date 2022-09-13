@@ -5,7 +5,13 @@
 *.o
 *.ko
 *.obj
+
+# Build files
+build/
 *.elf
+*.bin
+*.hex
+*.lst
 
 # Linker output
 *.ilk
@@ -50,3 +56,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Other
+.vscode
