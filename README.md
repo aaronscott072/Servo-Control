@@ -4,10 +4,10 @@
 1. [Project Purpose](#ProjectPurpose)
 2. [Hardware Configuration](#HardwareConfiguration)
 3. [Features](#Features)
-    3.1. [Version 0.2.0](#Version0.2.0)
-    3.2. [ToDo](#ToDo)
+    - 3.1. [Version 0.2.0](#Version0.2.0)
+    - 3.2. [ToDo](#ToDo)
 4. [Project Photos](#ProjectPhotos)
-    4.1. [Photos from Version 0.2.0](#PhotosFromVersion0.2.0)
+    - 4.1. [Photos from Version 0.2.0](#PhotosFromVersion0.2.0)
     
 ## Project Purpose <a name="ProjectPurpose"></a>
 This project serves these purposes:
@@ -21,7 +21,7 @@ This project serves these purposes:
 ```mermaid
 graph TD
 subgraph Development Board: NUCLEO-L433RC-P
-    A(MCU STM32L433RCT6P)
+    A(MCU<br/>STM32L433RCT6P)
     B(Virtual COM Port)
     C(ST-LINK<br/>Debugger/Programmer)
 end
@@ -44,7 +44,7 @@ A -- USART2 --- B
 ### ToDo <a name="ToDo"></a>
 
 - **Motor Controller**
-    - Close the loop and receive feedback from the servo motor by soldering a connection to the motor's potentiometer wiper
+    - Close the loop to receive feedback from the servo motor by soldering a connection to the motor's potentiometer wiper
 - **User Interface**
 	- Add the ability for a user to input motor angles and other commands via the LCD (add pushbuttons to the hardware setup) and the virtual COM port
 	- Add status/telemetry that is broadcast to the LCD and virtual COM port such as actual vs. expected angle, velocity, acceleration, etc.
